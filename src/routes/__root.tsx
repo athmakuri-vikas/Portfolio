@@ -4,12 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-
-import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
   return (
@@ -36,7 +32,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -70,70 +65,16 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#090909" },
-      { title: "Vikas Athmakuri — AI & Software Engineer" },
-      {
-        name: "description",
-        content:
-          "Portfolio of Vikas Athmakuri — Computer Science undergraduate building intelligent systems across AI, computer vision, and scalable software engineering.",
-      },
-      { name: "author", content: "Vikas Athmakuri" },
-      { property: "og:site_name", content: "Vikas Athmakuri" },
-      { property: "og:title", content: "Vikas Athmakuri — AI & Software Engineer" },
-      {
-        property: "og:description",
-        content:
-          "Featured work in computer vision, machine learning, and software engineering.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Vikas Athmakuri — AI & Software Engineer" },
-      {
-        name: "twitter:description",
-        content: "Featured work in computer vision, ML, and software engineering.",
-      },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
